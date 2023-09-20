@@ -12,9 +12,7 @@ services:
       - pg_data_food:/var/lib/postgresql/data
 
   backend:
-    build:
-      context: ../backend
-      dockerfile: Dockerfile
+    image: elvaleron/foodgram_backend
     env_file:
       - .env
     volumes:
@@ -22,13 +20,9 @@ services:
       - media_food:/app/media
     ports:
       - "8000:8000"
-    depends_on:
-      - db
 
   frontend:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
+    image: elvaleron/foodgram_frontend
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
@@ -44,5 +38,3 @@ services:
       - ../docs/:/usr/share/nginx/html/api/docs/
       - static_food:/staticfiles/static/
       - media_food:/mediafiles/media/
-    depends_on:
-      - backend
