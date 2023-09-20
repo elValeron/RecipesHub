@@ -36,14 +36,14 @@ class CustomUserViewSet(UserViewSet):
     queryset = CustomUser.objects.all()
 
     @action(
-            methods=(
-                'get',
-                'put',
-                'patch',
-                'delete',
-            ),
-            detail=False,
-            permission_classes=(IsAdminOrReadOnly,)
+        methods=(
+            'get',
+            'put',
+            'patch',
+            'delete'
+        ),
+        detail=False,
+        permission_classes=(IsAdminOrReadOnly,)
     )
     def me(self, request, *args, **kwargs):
         if request.user.is_anonymous:
@@ -268,8 +268,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
                     status=HTTPStatus.BAD_REQUEST
                 )
             ShoppingCart.objects.get_or_create(
-                    recipe=recipe,
-                    owner=request.user
+                recipe=recipe,
+                owner=request.user
             )
             serializer = ShortRecipeSerializer(
                 recipe,
@@ -306,13 +306,14 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
         ingredients = IngredientForRecipe.objects.filter(
             recipe__shopping__owner=request.user
-            ).values(
+        ).values(
             'ingredients__name',
             'ingredients__measurement_unit',
             'amount'
         )
-        shopping_cart = ['Cписок покупок {name}:'.format(
-            name=request.user.username
+        shopping_cart = [
+            'Cписок покупок {name}:'.format(
+                name=request.user.username
             ),
         ]
         file_name = f'{request.user.username}_shopping_cart.csv'

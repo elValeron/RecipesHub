@@ -307,7 +307,7 @@ class SubscribeListSerializer(CustomUserListSerializer):
             'is_subscribed',
             'recipes',
             'recipes_count',
-            )
+        )
 
     def get_recipes_count(self, obj):
         return obj.recipes.count()

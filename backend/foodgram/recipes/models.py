@@ -1,9 +1,8 @@
 from pytils.translit import slugify
-from django.core.validators import (
-                                    RegexValidator,
+from django.core.validators import (RegexValidator,
                                     MinValueValidator,
                                     MaxValueValidator
-                                   )
+                                    )
 from django.db import models
 
 from users.models import CustomUser
@@ -47,9 +46,10 @@ class Tag(models.Model):
         unique=True,
         verbose_name=models_vars.tag_color,
         help_text=models_vars.tag_color_help,
-        validators=[RegexValidator(
-            regex=models_vars.regex_validate,
-            message=models_vars.invalid_hex_message
+        validators=[
+            RegexValidator(
+                regex=models_vars.regex_validate,
+                message=models_vars.invalid_hex_message
             )
         ]
     )
