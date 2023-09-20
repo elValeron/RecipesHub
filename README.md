@@ -1,4 +1,4 @@
-# [Foodgram][https://github.com/elValeron/foodgram-project-react.git]
+# ![Foodgram](https://github.com/elValeron/foodgram-project-react.git)
 ## Foodgram - Место где Ты можешь поделится своим любимым рецептом!
 
 Бэкэнд стэк:
@@ -24,7 +24,10 @@ Postgres 3.10
             ```
         - Перейдите в директорию infra, запуск сервиса в докер контейнерах необходимо выполнять из этой директории
         - Создайте по шаблону env_example собственный файл (.env), с данными для подключения к бд
-        - Выполните команду sudo docker compose -f docker-compose.yml up -d 
+        - Выполните команду для запуска сервиса в контейнерах:
+            ```
+            - sudo docker compose -f docker-compose.yml up -d 
+            ```
         - После запуска сервиса необходимо загрузить данные ингредиентов командой:
         ```
         - sudo docker compose -f docker-compose.yml exec backend python manage.py load_csv ingredients.csv
