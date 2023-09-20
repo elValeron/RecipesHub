@@ -1,7 +1,8 @@
-# Foodgram[https://github.com/elValeron/foodgram-project-react.git]
+# [Foodgram][https://github.com/elValeron/foodgram-project-react.git]
 ## Foodgram - Место где Ты можешь поделится своим любимым рецептом!
 
 Бэкэнд стэк:
+Python 3.9
 Django 3.2
 Django-rest-framework 3.12
 Djoser
@@ -12,64 +13,44 @@ Postgres 3.10
 
 1. ### Запуск сервиса в докер контейнерах:
     - На виртуальной машине, сервере или локально создайте директорию в которой будет хранится проект
-        _ Перейдите в директорию infra, запуск сервиса в докер контейнерах необходимо выполнять из этой директории
-        _ Создайте по шаблону env_example собственный файл (.env), с данными для подключения к бд
-        _ Выполните команду sudo docker compose -f docker-compose.yml up -d 
-        _ После запуска сервиса необходимо загрузить данные ингредиентов командой:
+        ```
+        - Перейдите в каталог, в котором хранится проект, командой:
+            - cd <dir_name>/
+        - Склонируйте репозиторий командой:
+            - git clone https://github.com/elValeron/foodgram-project-react.git
+        - Перейдите в директорию infra, запуск сервиса в докер контейнерах необходимо выполнять из этой директории
+        - Создайте по шаблону env_example собственный файл (.env), с данными для подключения к бд
+        - Выполните команду sudo docker compose -f docker-compose.yml up -d 
+        - После запуска сервиса необходимо загрузить данные ингредиентов командой:
             - sudo docker compose -f docker-compose.yml exec backend python manage.py load_csv ingredients.csv
         ### Поздравляю! Можно приступить к работе с сервисом!
-
-
-
-
-
-Перейти в домашний каталог:
-cd ~/
-Создание директории:
-mkdir kittygram/
-Отключиться от сервера:
-exit
-```
-Для начала работы необходимо клонировать репозиторий на локальный компьютер
-```
-https://github.com/elValeron/kittygram_final.git
-```
-Перейти в папку /kittygram_final
-```
-cd kittygram_final/
-```
-Скопировать файл docker-compose.production.yml на виртуальный сервер командой:
-```
-sudo scp -i n\
- <путь до файла с ssh>/<файл с ssh> docker-compose.production.yml n\
- <user>@<ip-сервера>:~/kittygram/
-```
-Создать и открыть файл .env: 
-```
-touch .env
-sudo nano .env
-```
-Добавить переменные:
-```
-POSTGRES_USER=Админ для контейнера с бд в Docker'e
-POSTGRES_PASSWORD=пароль для пользователя в контейнере с бд в Docker'e
-POSTGRES_DB=Название БД для контейнера Docker
-DB_NAME=Имя БД к которой надо подключится 
-DB_HOST=Имя контейнера в которой находится бд 
-DB_PORT=Порт через который необходимо подключаться к бд
-SECRET_KEY=Секретный ключ Django для файла settings.py
-ALLOWED_HOSTS=список хостов для подключения.
-```
-Скопировать файл .env на сервер командой:
-```
-sudo scp -i 
- <путь до файла с ssh>/<файл с ssh> .env 
- <user>@<ip-сервера>:~/kittygram/
-```
-Подключиться к серверу и запустить файл docker-compose.production.yml:
-```
-cd ~/kittygram/
-sudo docker compose -f docker-compose.production.yml up -d
-```
-
-Author @elValeron
+        ```
+2. ### Запуск сервиса для отладки: 
+    - На локальной машине создайте директорию в которой будет хранится проект
+        - Перейдите в каталог, в котором хранится проект, командой:
+            - cd <dir_name>/
+        - Склонируйте репозиторий командой:
+            - git clone https://github.com/elValeron/foodgram-project-react.git
+        - Перейдите в директорию backend/ и установите виртуальное окружение командами:
+            - cd backend/
+            Виртуальное окружение для win:
+            - python -m venv venv 
+            Виртуальное окружение для Linux\Mac:
+            - python3.9 -m venv venv
+        - Активируйте виртуальное окружение и установите зависимости командами:
+            Для Linux/Mac:
+            - source venv/bin/activate
+            - pip install -r requirements.txt
+            Для win:
+            - source venv/Script/activate
+            - pip install -r requirements.txt
+        - Измените в файле foodgram/foodgram/settings.py значение переменной DEBUG = True для подключение к БД SQLite
+        - Перейдите в директорию backend/foodgram и создайте и примените миграции командами:
+            ```
+            - python manage.py makemigrations
+            - python manage.py migrate
+            ```
+        - Загрузите данные из файла ingredients.csv командой:
+            - python manage.py load_csv ingredients.csv
+        
+        ### Поздравляю, проект готов к дебагу, удачи! :+1:
