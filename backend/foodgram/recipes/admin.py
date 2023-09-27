@@ -1,5 +1,7 @@
-from django.contrib import admin
+from django.contrib.admin import ModelAdmin, register, TabularInline, site
+from django.contrib.auth.models import Group
 
+from .constants import MIN_VALUE
 from .models import (Ingredient,
                      IngredientForRecipe,
                      Favorite,
@@ -8,15 +10,16 @@ from .models import (Ingredient,
                      ShoppingCart)
 
 
-class IngredientForRecipeAdmin(admin.TabularInline):
+class IngredientForRecipeAdmin(TabularInline):
     """Связывающая модель рецепт-ингредиент для админ панели."""
 
     model = IngredientForRecipe
-    min_num = 1
+    min_num = MIN_VALUE
     extra = 0
 
 
-class IngridientsAdmin(admin.ModelAdmin):
+@register(Ingredient)
+class IngridientsAdmin(ModelAdmin):
     """Модель ингредиентов для админ панели."""
 
     list_display = (
@@ -31,7 +34,8 @@ class IngridientsAdmin(admin.ModelAdmin):
     )
 
 
-class TagAdmin(admin.ModelAdmin):
+@register(Tag)
+class TagAdmin(ModelAdmin):
     """Модель тэга для админ панели."""
     list_display = (
         'pk',
@@ -48,14 +52,21 @@ class TagAdmin(admin.ModelAdmin):
     empty_value_display = '-empty-'
 
 
-class RecipeAdmin(admin.ModelAdmin):
+@register(Recipe)
+class RecipeAdmin(ModelAdmin):
     """Модель рецепта для админ панели."""
 
     inlines = (IngredientForRecipeAdmin,)
+    list_display_links = (
+        'pk',
+        'name',
+    )
     list_display = (
         'author',
         'pk',
         'name',
+        'get_ingredients',
+        'in_favorites',
     )
     search_fields = (
         'name',
@@ -67,44 +78,43 @@ class RecipeAdmin(admin.ModelAdmin):
     )
     empty_value_display = '-empty-'
 
+    def in_favorites(self, obj):
+        return obj.favorite_set.count()
 
-class FavoriteAdmin(admin.ModelAdmin):
+    def get_ingredients(self, obj):
+        ingredient = [i.name for i in obj.ingredients.all()]
+        return ingredient
+
+    get_ingredients.short_description = 'ингредиенты'
+    in_favorites.short_description = 'кол-во добавлений в избранное'
+
+
+@register(Favorite)
+class FavoriteAdmin(ModelAdmin):
     """Модель Favorite для админ панели"""
 
     fields = (
         'recipe',
         'author',
     )
-    readonly_fields = (
-        'recipe',
-        'author',
-    )
     search_fields = (
         'author',
     )
 
 
-class ShoppingCartAdmin(admin.ModelAdmin):
+@register(ShoppingCart)
+class ShoppingCartAdmin(ModelAdmin):
     """Модель ShoppingCart для админ панели."""
 
     fields = (
         'pk',
         'recipe',
-        'owner',
-    )
-    readonly_fields = (
-        'pk',
-        'recipe',
-        'owner',
+        'author',
     )
     search_fields = (
-        'owner',
+        'author',
         'recipe',
     )
 
 
-admin.site.register(Recipe, RecipeAdmin,)
-admin.site.register(Ingredient, IngridientsAdmin)
-admin.site.register(Tag, TagAdmin)
-admin.site.register(Favorite, FavoriteAdmin)
-admin.site.register(ShoppingCart, ShoppingCartAdmin)
+site.unregister(Group)

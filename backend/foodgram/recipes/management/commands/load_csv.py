@@ -3,39 +3,34 @@ import csv
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand
 
-from recipes.models import Ingredient
+from recipes.models import Ingredient, Tag
 
 
 class Command(BaseCommand):
+    """Загрузка данных в бд из файлов csv."""
     help = 'Загрузка данных из csv файла'
 
-    def add_arguments(self, parser):
-        parser.add_argument(
-            'csv_file',
-            type=str,
-            help='Путь к csv файлу'
-        )
-
     def handle(self, *args, **options):
-        csv_file = options['csv_file']
-        self.import_data(csv_file)
-
-    def import_data(self, csv_file):
-        with open(csv_file, 'r') as file:
-            reader = csv.reader(file)
-            next(reader)
-            for row in reader:
-                name = row[0]
-                measurement_unit = row[1]
-
-                try:
-                    obj = Ingredient.objects.get(name=name)
-                    obj.measurement_unit = measurement_unit
-                    obj.save()
-                except ObjectDoesNotExist:
-                    obj = Ingredient(
-                        name=name,
-                        measurement_unit=measurement_unit
+        try:
+            with open('ingredients.csv', 'r', encoding='utf-8') as file:
+                field_names = ['name', 'measurement_unit']
+                reader = csv.DictReader(file, fieldnames=field_names)
+                for row in reader:
+                    obj = Ingredient.objects.get_or_create(
+                        name=row['name'],
+                        measurement_unit=row['measurement_unit']
                     )
-                    obj.save()
-            print(f'Загрузка данных из файла {file.name} завершена')
+            with open('tags.csv', 'r', encoding='utf-8') as file:
+                for row in csv.DictReader(file):
+                    obj = Tag.objects.get_or_create(
+                        name=row['name'],
+                        color=row['color'],
+                        slug=row['slug']
+                    )
+        except ObjectDoesNotExist:
+            obj = Ingredient(
+                name=row['name'],
+                measurement_unit=row['measurement_unit']
+            )
+            obj.save()
+        print(f'Загрузка данных из файла {file.name} завершена')

@@ -1,25 +1,23 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-from users.vars import user_vars
-
 
 class CustomUser(AbstractUser):
+    """Модель описывающая Пользователя."""
     email = models.EmailField(
-        max_length=100,
+        max_length=254,
         unique=True,
-        verbose_name=user_vars.user_verbose_email,
-        help_text=user_vars.user_help_text_email,
+        verbose_name='Почта',
+        help_text='Введите Вашу почту',
     )
     LOGIN_FIELDS = ('email',)
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ('username',)
+    REQUIRED_FIELDS = ('username', 'first_name', 'last_name')
 
     class Meta:
-        ordering = ['email']
-        verbose_name = user_vars.custom_user_singular
-        verbose_name_plural = user_vars.custom_user_plural
-        unique_together = ('username', 'email')
+        ordering = ('email',)
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
 
     def __str__(self) -> str:
         return self.username
@@ -30,20 +28,18 @@ class Subscribe(models.Model):
         CustomUser,
         related_name='subscriber',
         on_delete=models.CASCADE,
-        blank=True,
-        null=True,
-        verbose_name=user_vars.follower_verbose
+        verbose_name='Подписчик'
     )
     author = models.ForeignKey(
         CustomUser,
         related_name='publisher',
-        blank=True,
-        null=True,
         on_delete=models.CASCADE,
-        verbose_name=user_vars.publisher_verbose
+        verbose_name='Автор рецепта'
     )
 
     class Meta:
+        verbose_name = 'Подписка'
+        verbose_name_plural = 'Подписки'
         constraints = [
             models.UniqueConstraint(
                 fields=[
@@ -51,7 +47,12 @@ class Subscribe(models.Model):
                     'author',
                 ],
                 name='unique_subscribe'
-            )
+            ),
+            models.CheckConstraint(
+                name='%(app_label)s_%(class)s_unique_failture',
+                check=~models.Q(user=models.F('author')),
+            ),
         ]
-        verbose_name = user_vars.subscribe_singular
-        verbose_name_plural = user_vars.subscribe_plural
+
+    def __str__(self):
+        return f'{self.user} подписан на {self.author}'

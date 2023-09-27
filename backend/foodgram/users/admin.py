@@ -1,17 +1,20 @@
-from django.contrib import admin
+from django.contrib.admin import ModelAdmin, register
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 from .models import CustomUser, Subscribe
 
 
-class UserAdmin(admin.ModelAdmin):
+@register(CustomUser)
+class UserAdmin(BaseUserAdmin):
     """Модель User для админ-панели"""
-    fields = (
+    list_display = (
         'username',
-        'email',
         'first_name',
         'last_name',
-        'password'
+        'recipe_count',
+        'subscriber_count'
     )
+
     list_filter = (
         'username',
         'email',
@@ -21,15 +24,21 @@ class UserAdmin(admin.ModelAdmin):
         'email',
     )
 
+    def recipe_count(self, obj):
+        return obj.recipes.count()
 
-class SubscribeAdmin(admin.ModelAdmin):
+    def subscriber_count(self, obj):
+        return obj.subscriber.count()
+
+    recipe_count.short_description = 'Кол-во рецептов'
+    subscriber_count.short_description = 'Кол-во подписчиков'
+
+
+@register(Subscribe)
+class SubscribeAdmin(ModelAdmin):
     """Модель Subscribe для админ-панели"""
     list_display = (
         'pk',
         'user',
         'author',
     )
-
-
-admin.site.register(CustomUser, UserAdmin)
-admin.site.register(Subscribe, SubscribeAdmin)

@@ -1,0 +1,6 @@
+id,name,color,slug
+1,Завтрак,#14fecf,breakfast
+2,Обед,#ffe51b,lunch
+3,Ужин,#1cff4c,dinner
+4,Перекус,#f01300,snack
+5,НочнойЖор,#3f39b7,nightsnack 

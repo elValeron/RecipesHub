@@ -2,17 +2,20 @@ import os
 
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-SECRET_KEY = (
-    'django-insecure-wi#2^+!d8s%ci1-*j^viaepo+)+cm9wwz!qrz7md@t$a66a5fm'
-)
+SECRET_KEY = os.getenv('SECRET_KEY', ' ')
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
+CHECKOUT = True
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -25,6 +28,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'djoser',
     'django_filters',
+    'colorfield',
     'recipes.apps.RecipesConfig',
     'users.apps.UsersConfig',
     'api.apps.ApiConfig',
@@ -60,25 +64,24 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'foodgram.wsgi.application'
 
-if DEBUG is True:
-
+if CHECKOUT is True:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB', 'db'),
-        'USER': os.getenv('POSTGRES_USER', 'elvaleron'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD', ''),
-        'HOST': os.getenv('DB_HOST', ''),
-        'PORT': os.getenv('DB_PORT', 5432)
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('POSTGRES_DB', 'db'),
+            'USER': os.getenv('POSTGRES_USER', 'elvaleron'),
+            'PASSWORD': os.getenv('POSTGRES_PASSWORD', ''),
+            'HOST': os.getenv('DB_HOST', ''),
+            'PORT': os.getenv('DB_PORT', 5432)
+        }
     }
-}
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -125,7 +128,7 @@ AUTH_USER_MODEL = 'users.CustomUser'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
@@ -140,11 +143,10 @@ DJOSER = {
     'SERIALIZERS': {
         'current_user': 'api.serializers.CustomUserListSerializer',
         'user': 'api.serializers.CustomUserListSerializer',
-        'user_create': 'api.serializers.CustomUserSerializer',
     },
     'PERMISSIONS': {
         'current_user': ['api.permissions.IsAdminOrReadOnly'],
         'user_list': ['rest_framework.permissions.AllowAny'],
-        'user': ['api.permissions.IsAdminOrReadOnly'],
+        'user': ['djoser.permissions.CurrentUserOrAdminOrReadOnly'],
     }
 }
