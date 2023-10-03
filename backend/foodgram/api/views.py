@@ -1,15 +1,17 @@
 from http import HTTPStatus
-from django.db.models import F, OuterRef, Exists, When, Case, Subquery
-from django.shortcuts import get_object_or_404
-from djoser.views import UserViewSet
+
+from django.db.models import Case, Exists, F, OuterRef, Subquery, When
 from django.http import FileResponse
+from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
+from djoser.views import UserViewSet
 from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import (AllowAny,
                                         IsAuthenticated,
                                         IsAuthenticatedOrReadOnly,)
-from django_filters.rest_framework import DjangoFilterBackend
+
 
 from api.filters import IngredientsFilterSet, RecipeFilterSet
 from api.pagination import CustomPaginator
@@ -82,9 +84,9 @@ class CustomUserViewSet(UserViewSet):
             subscribe.delete()
             msg = f'{author.username} удалён из подписок.'
             return Response(
-                    data={'detail': msg},
-                    status=HTTPStatus.NO_CONTENT
-                )
+                data={'detail': msg},
+                status=HTTPStatus.NO_CONTENT
+            )
         msg = 'Вы не были подписаны на пользователя'
         return Response(
             data={'detail': msg},
@@ -130,17 +132,17 @@ class TagViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     pagination_class = None
-    
+
 
 class RecipeViewSet(viewsets.ModelViewSet):
     """Вьюсет для работы с рецептами"""
 
     queryset = Recipe.objects.all().select_related(
         'author'
-        ).prefetch_related(
-            'tags',
-            'ingredients'
-        )
+    ).prefetch_related(
+        'tags',
+        'ingredients'
+    )
     permission_classes = (IsAuthenticatedOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
     filterset_class = RecipeFilterSet
@@ -173,7 +175,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
                     then=False
                 ),
                 default=False,
-                
             ),
             is_in_shopping_cart=Case(
                 When(
@@ -219,7 +220,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return Response(
                 data=serializer.data,
                 status=HTTPStatus.CREATED
-                )
+            )
         return Response(data=serializer.errors, status=HTTPStatus.BAD_REQUEST)
 
     @staticmethod
@@ -234,9 +235,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
             obj.delete()
             msg = f'{recipe.name} удалён из {cls._meta.verbose_name_plural}'
             return Response(
-                        data={'detail': msg},
-                        status=HTTPStatus.NO_CONTENT
-                    )
+                data={'detail': msg},
+                status=HTTPStatus.NO_CONTENT
+            )
         msg = f'Рецепт не был добавлен в {cls._meta.verbose_name_plural}'
         return Response(
             data={'detail': msg},
@@ -297,9 +298,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
         file_name = f'{request.user}_shopping_cart.txt'
         for ingredient in ingredients:
             shopping_cart.append(
-                ' '.join(map(
-                    str,
-                    ingredient.values()
+                ' '.join(
+                    map(
+                        str,
+                        ingredient.values()
                     )
                 ) + '\n'
             )

@@ -33,4 +33,4 @@ class Command(BaseCommand):
                 measurement_unit=row['measurement_unit']
             )
             obj.save()
-        print(f'Загрузка данных из файла {file.name} завершена')
+        print('Данные успешно загружены')

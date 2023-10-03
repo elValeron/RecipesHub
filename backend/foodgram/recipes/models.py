@@ -1,6 +1,5 @@
 from colorfield.fields import ColorField
-from django.core.validators import (MinValueValidator,
-                                    MaxValueValidator)
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 from recipes import constants
@@ -24,12 +23,13 @@ class Ingredient(models.Model):
         verbose_name_plural = 'Ингредиенты'
         constraints = [
             models.UniqueConstraint(
-                name='%(class)s_unique',
+                name='unit_ingredients_unique',
                 fields=[
                     'name',
                     'measurement_unit'
                 ]
             )
+
         ]
 
     def __str__(self) -> str:
@@ -158,7 +158,7 @@ class IngredientForRecipe(models.Model):
                     'recipe',
                     'ingredients',
                 ],
-                name='%(app_label)s_%(class)s'
+                name='ingredients_unique'
             )
         ]
 
