@@ -65,7 +65,7 @@ jobs:
           tags: ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:latest
   
   frontend_tests:
-    runs-on: alpine
+    runs-on: alpine-latest
     steps:
     - uses: actions/checkout@v3
     - name: Set up nodeJS
