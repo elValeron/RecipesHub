@@ -130,3 +130,7 @@ dmypy.json
 
 # .idea
 .idea
+
+#postman tests
+.clear_db.sh
+.Foodgram.postman_collection.json
