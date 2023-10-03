@@ -23,8 +23,8 @@ class IngridientsAdmin(ModelAdmin):
     """Модель ингредиентов для админ панели."""
 
     list_display = (
-        'measurement_unit',
         'name',
+        'measurement_unit',
     )
     search_fields = (
         'name',

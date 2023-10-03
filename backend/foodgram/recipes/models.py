@@ -173,7 +173,7 @@ class AbstractFavoriteCart(models.Model):
         verbose_name='Рецепт',
         on_delete=models.CASCADE
     )
-    author = models.ForeignKey(
+    user = models.ForeignKey(
         CustomUser,
         verbose_name='Автор',
         on_delete=models.CASCADE
@@ -181,13 +181,13 @@ class AbstractFavoriteCart(models.Model):
 
     class Meta:
         abstract = True
-        ordering = ('-author')
+        ordering = ('-user')
         constraints = [
             models.UniqueConstraint(
                 name='%(class)s_unique',
                 fields=[
                     'recipe',
-                    'author'
+                    'user'
                 ]
             )
         ]
