@@ -65,8 +65,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'foodgram.wsgi.application'
+CHECKOUT = os.getenv('CHECKOUT')
 
-if DEBUG:
+if CHECKOUT:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
