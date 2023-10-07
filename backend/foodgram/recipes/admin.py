@@ -1,7 +1,11 @@
-from django.contrib.admin import ModelAdmin, register, TabularInline, site
+from django.contrib.admin import (display,
+                                  ModelAdmin,
+                                  register,
+                                  TabularInline,
+                                  site)
 from django.contrib.auth.models import Group
 
-from .constants import MIN_VALUE
+from foodgram.constants import MIN_VALUE
 from .models import (Ingredient,
                      IngredientForRecipe,
                      Favorite,
@@ -78,15 +82,13 @@ class RecipeAdmin(ModelAdmin):
     )
     empty_value_display = '-empty-'
 
+    @display(description='в избранном')
     def in_favorites(self, obj):
         return obj.favorite_set.count()
 
+    @display(description='ингредиенты')
     def get_ingredients(self, obj):
-        ingredient = [i.name for i in obj.ingredients.all()]
-        return ingredient
-
-    get_ingredients.short_description = 'ингредиенты'
-    in_favorites.short_description = 'кол-во добавлений в избранное'
+        return [ingredient.name for ingredient in obj.ingregients.all()]
 
 
 @register(Favorite)

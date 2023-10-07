@@ -1,24 +1,26 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from foodgram.constants import MAX_LENGTH_EMAIL, MAX_LENGTH_PERSONAL
 
-class CustomUser(AbstractUser):
+
+class User(AbstractUser):
     """Модель описывающая Пользователя."""
     email = models.EmailField(
-        max_length=254,
+        max_length=MAX_LENGTH_EMAIL,
         unique=True,
         verbose_name='Почта',
         help_text='Введите Вашу почту',
     )
     first_name = models.CharField(
-        max_length=150,
+        max_length=MAX_LENGTH_PERSONAL,
         blank=False,
         null=False,
         verbose_name='Имя',
         help_text='Введите ваше имя'
     )
     last_name = models.CharField(
-        max_length=150,
+        max_length=MAX_LENGTH_PERSONAL,
         blank=False,
         null=False,
         verbose_name='Фамилия',
@@ -29,7 +31,7 @@ class CustomUser(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ('username', 'first_name', 'last_name')
 
-    class Meta:
+    class Meta(AbstractUser.Meta):
         ordering = ('email',)
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
@@ -40,13 +42,13 @@ class CustomUser(AbstractUser):
 
 class Subscribe(models.Model):
     user = models.ForeignKey(
-        CustomUser,
+        User,
         related_name='subscriber',
         on_delete=models.CASCADE,
         verbose_name='Подписчик'
     )
     author = models.ForeignKey(
-        CustomUser,
+        User,
         related_name='publisher',
         on_delete=models.CASCADE,
         verbose_name='Автор рецепта'

@@ -2,19 +2,22 @@ from colorfield.fields import ColorField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
-from recipes import constants
-from users.models import CustomUser
+from foodgram.constants import (MAX_LENGTH,
+                                MAX_VALUE_TIME,
+                                MAX_VALUE_AMOUNT,
+                                MIN_VALUE)
+from users.models import User
 
 
 class Ingredient(models.Model):
     """Модель описывающая ингридиенты рецепта."""
 
     name = models.CharField(
-        max_length=constants.MAX_LENGTH,
+        max_length=MAX_LENGTH,
         verbose_name='Название ингредиента',
     )
     measurement_unit = models.CharField(
-        max_length=constants.MAX_LENGTH,
+        max_length=MAX_LENGTH,
         verbose_name='Единица измерения'
     )
 
@@ -40,7 +43,7 @@ class Tag(models.Model):
     """Модель описывающая Тэги рецепта."""
 
     name = models.CharField(
-        max_length=constants.MAX_LENGTH,
+        max_length=MAX_LENGTH,
         unique=True,
         verbose_name='Имя тэга',
     )
@@ -49,7 +52,7 @@ class Tag(models.Model):
         unique=True
     )
     slug = models.SlugField(
-        max_length=constants.MAX_LENGTH,
+        max_length=MAX_LENGTH,
         unique=True,
         verbose_name='Адрес тэга'
     )
@@ -66,13 +69,13 @@ class Recipe(models.Model):
     """Модель описывающая рецепт."""
 
     author = models.ForeignKey(
-        CustomUser,
+        User,
         related_name='recipes',
         on_delete=models.CASCADE,
         verbose_name='Автор рецепта'
     )
     name = models.CharField(
-        max_length=constants.MAX_LENGTH,
+        max_length=MAX_LENGTH,
         verbose_name='Название рецепта',
     )
     image = models.ImageField(
@@ -96,12 +99,12 @@ class Recipe(models.Model):
         verbose_name='Время приготовления',
         validators=[
             MinValueValidator(
-                limit_value=constants.MIN_VALUE,
-                message='Значение не может быть меньше 1.'
+                limit_value=MIN_VALUE,
+                message=f'Значение не может быть меньше {MIN_VALUE}.'
             ),
             MaxValueValidator(
-                limit_value=constants.MAX_VALUE_TIME,
-                message='Значение не может быть больше 400.'
+                limit_value=MAX_VALUE_TIME,
+                message=f'Значение не может быть больше {MAX_VALUE_TIME}.'
             )
         ]
     )
@@ -139,11 +142,11 @@ class IngredientForRecipe(models.Model):
         verbose_name='Кол-во ингредиента',
         validators=[
             MinValueValidator(
-                limit_value=constants.MIN_VALUE,
+                limit_value=MIN_VALUE,
                 message='Значение не может быть меньше 1.'
             ),
             MaxValueValidator(
-                limit_value=constants.MAX_VALUE_AMOUNT,
+                limit_value=MAX_VALUE_AMOUNT,
                 message='Введите значение не более 100000'
             )
         ]
@@ -166,7 +169,7 @@ class IngredientForRecipe(models.Model):
         return f'{self.recipe} {self.ingredients} {self.amount}'
 
 
-class AbstractFavoriteCart(models.Model):
+class AbstractRecipeUser(models.Model):
     """Базовая модель для Favorite и ShoppingCart"""
     recipe = models.ForeignKey(
         Recipe,
@@ -174,14 +177,14 @@ class AbstractFavoriteCart(models.Model):
         on_delete=models.CASCADE
     )
     user = models.ForeignKey(
-        CustomUser,
+        User,
         verbose_name='Автор',
         on_delete=models.CASCADE
     )
 
     class Meta:
         abstract = True
-        ordering = ('-user')
+        ordering = ('-user',)
         constraints = [
             models.UniqueConstraint(
                 name='%(class)s_unique',
@@ -193,20 +196,20 @@ class AbstractFavoriteCart(models.Model):
         ]
 
     def __str__(self) -> str:
-        return f'{self.author.username}, {self.recipe.name}'
+        return f'{self.user.username}, {self.recipe.name}'
 
 
-class Favorite(AbstractFavoriteCart):
+class Favorite(AbstractRecipeUser):
     """Модель описывающая Избранное."""
 
-    class Meta:
+    class Meta(AbstractRecipeUser.Meta):
         verbose_name = 'Избранный рецепт'
         verbose_name_plural = 'Избранные рецепты'
 
 
-class ShoppingCart(AbstractFavoriteCart):
+class ShoppingCart(AbstractRecipeUser):
     """Модель описывающая Корзину покупок"""
 
-    class Meta:
+    class Meta(AbstractRecipeUser.Meta):
         verbose_name = 'Корзина покупок'
         verbose_name_plural = 'Корзины покупок'
