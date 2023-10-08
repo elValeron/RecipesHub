@@ -1,7 +1,8 @@
 from http import HTTPStatus
 
+
 from django.db.models import Exists, OuterRef, Subquery, Sum
-from django.http import FileResponse, Http404
+from django.http import FileResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
 from rest_framework.response import Response
@@ -54,10 +55,6 @@ class UserViewSet(UserViewSet):
     )
     def subscribe(self, request, id):
         """Создание подписки"""
-        try:
-            User.objects.get(id=id)
-        except User.DoesNotExist:
-            raise Http404('Пользователя не существует')
         serializer = SubscribePostSerializer(
             data={
                 'author': id,
@@ -75,24 +72,18 @@ class UserViewSet(UserViewSet):
     @subscribe.mapping.delete
     def delete_subscribe(self, request, id):
         """Удаление подписки"""
-        try:
-            User.objects.get(id=id)
-        except User.DoesNotExist:
-            raise Http404('Пользователь не найден')
         subscribe = Subscribe.objects.filter(
             author_id=id,
             user=request.user.id
         )
         if subscribe.exists():
             subscribe.delete()
-            msg = f'{id} удалён из подписок.'
             return Response(
-                data={'detail': msg},
+                data={'detail': f'{id} удалён из подписок.'},
                 status=HTTPStatus.NO_CONTENT
             )
-        msg = 'Вы не были подписаны на пользователя'
         return Response(
-            data={'detail': msg},
+            data={'detail': f'Вы не были подписаны на {id}'},
             status=HTTPStatus.BAD_REQUEST
         )
 
@@ -181,7 +172,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
     @staticmethod
     def favorite_cart_add(serializer_class, request, id):
         """Статик добавления рецепта в избранное/корзину."""
-
         serializer = serializer_class(
             data={
                 'recipe': id,
@@ -201,24 +191,24 @@ class RecipeViewSet(viewsets.ModelViewSet):
     @staticmethod
     def favorite_cart_delete(cls, request, pk):
         """Статик удаления рецепта из избранного/корзины"""
-        try:
-            Recipe.objects.get(pk=pk)
-        except Recipe.DoesNotExist:
-            raise Http404('Рецепта не существует')
         obj = cls.objects.filter(
             recipe=pk,
             user=request.user.id
         )
         if obj.exists():
             obj.delete()
-            msg = f' удалён из {cls._meta.verbose_name_plural}'
             return Response(
-                data={'detail': msg},
+                data={
+                    'detail':
+                    f' удалён из {cls._meta.verbose_name_plural}'
+                },
                 status=HTTPStatus.NO_CONTENT
             )
-        msg = f'Рецепт не был добавлен в {cls._meta.verbose_name_plural}'
         return Response(
-            data={'detail': msg},
+            data={
+                'detail':
+                f'Рецепт не был добавлен в {cls._meta.verbose_name_plural}'
+            },
             status=HTTPStatus.BAD_REQUEST
         )
 
@@ -294,7 +284,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
         shopping_cart = [
             f'Cписок покупок {request.user}: \r'
         ]
-        file_name = f'{request.user}_shopping_cart.txt'
         for ingredient in ingredients:
             shopping_cart.append(
                 ' '.join(
@@ -306,6 +295,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
             )
         response = FileResponse(shopping_cart, content_type='text')
         response['Content-Disposition'] = (
-            'attachment; filename={file_name}'.format(file_name=file_name)
+            'attachment; filename={file_name}'.format(file_name=request.user)
         )
         return response

@@ -18,6 +18,8 @@ services:
     volumes:
       - static_food:/app/static
       - media_food:/app/media
+    depends_on:
+      - db
     ports:
       - "8000:8000"
 
@@ -25,11 +27,9 @@ services:
     image: elvaleron/foodgram_frontend
     volumes:
       - ../frontend/:/app/result_build/
-    depends_on:
-      - nginx
 
   nginx:
-    image: nginx:1.19.3
+    image: elvaleron/foodgram_gateway
     ports:
       - "80:80"
     volumes:
@@ -38,3 +38,6 @@ services:
       - ../docs/:/usr/share/nginx/html/api/docs/
       - static_food:/staticfiles/static/
       - media_food:/mediafiles/media/
+    depends_on:
+      - backend
+      - frontend

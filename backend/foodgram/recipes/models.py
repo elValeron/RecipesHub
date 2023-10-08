@@ -143,11 +143,11 @@ class IngredientForRecipe(models.Model):
         validators=[
             MinValueValidator(
                 limit_value=MIN_VALUE,
-                message='Значение не может быть меньше 1.'
+                message=f'Значение не может быть меньше {MIN_VALUE}.'
             ),
             MaxValueValidator(
                 limit_value=MAX_VALUE_AMOUNT,
-                message='Введите значение не более 100000'
+                message=f'Введите значение не более {MAX_VALUE_AMOUNT}'
             )
         ]
     )
@@ -169,7 +169,7 @@ class IngredientForRecipe(models.Model):
         return f'{self.recipe} {self.ingredients} {self.amount}'
 
 
-class AbstractRecipeUser(models.Model):
+class RecipeUser(models.Model):
     """Базовая модель для Favorite и ShoppingCart"""
     recipe = models.ForeignKey(
         Recipe,
@@ -199,17 +199,17 @@ class AbstractRecipeUser(models.Model):
         return f'{self.user.username}, {self.recipe.name}'
 
 
-class Favorite(AbstractRecipeUser):
+class Favorite(RecipeUser):
     """Модель описывающая Избранное."""
 
-    class Meta(AbstractRecipeUser.Meta):
+    class Meta(RecipeUser.Meta):
         verbose_name = 'Избранный рецепт'
         verbose_name_plural = 'Избранные рецепты'
 
 
-class ShoppingCart(AbstractRecipeUser):
+class ShoppingCart(RecipeUser):
     """Модель описывающая Корзину покупок"""
 
-    class Meta(AbstractRecipeUser.Meta):
+    class Meta(RecipeUser.Meta):
         verbose_name = 'Корзина покупок'
         verbose_name_plural = 'Корзины покупок'

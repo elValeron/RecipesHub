@@ -3,7 +3,7 @@
 
 Бэкэнд стэк:
 Python 3.9
-Django 3.2
+Django 3.14
 Django-rest-framework 3.12
 Djoser
 Проект реализован с помощью сервиса контейниризации Docker.

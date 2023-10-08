@@ -27,5 +27,5 @@ class Command(BaseCommand):
                         slug=row['slug']
                     )
         except FileNotFoundError:
-            raise Exception('Файлы для загрузки не найдены')
+            raise FileNotFoundError('Файлы не найдены')
         print('Данные успешно загружены')

@@ -298,10 +298,8 @@ class SubscribeListSerializer(UserSerializer):
         if recipes_limit:
             try:
                 recipes = recipes[:int(recipes_limit)]
-            except TypeError:
-                recipes = recipes
-        else:
-            recipes = recipes
+            except ValueError:
+                pass
         return ShortRecipeSerializer(recipes, many=True).data
 
 
