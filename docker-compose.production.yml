@@ -4,6 +4,7 @@ volumes:
   static_food:
   pg_data_food:
 
+
 services:
   db:
     image: postgres:13.10
@@ -16,28 +17,25 @@ services:
     env_file:
       - .env
     volumes:
-      - static_food:/app/static
-      - media_food:/app/media
+      - static_food:/backend_static
+      - media_food:/media
     depends_on:
       - db
-    ports:
-      - "8000:8000"
 
   frontend:
     image: elvaleron/foodgram_frontend
+    command: cp -r /app/build/. /frontend_static/
     volumes:
-      - ../frontend/:/app/result_build/
+      - static_food:/frontend_static
 
-  nginx:
+  gateway:
     image: elvaleron/foodgram_gateway
     ports:
       - "80:80"
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - ../frontend/build:/usr/share/nginx/html/
-      - ../docs/:/usr/share/nginx/html/api/docs/
-      - static_food:/staticfiles/static/
-      - media_food:/mediafiles/media/
+      - static_food:/staticfiles/
+      - media_food:/mediafiles/
     depends_on:
       - backend
       - frontend
+
