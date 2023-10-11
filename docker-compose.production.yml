@@ -31,7 +31,7 @@ services:
   gateway:
     image: elvaleron/foodgram_gateway
     ports:
-      - "80:80"
+      - 8000:80
     volumes:
       - static_food:/staticfiles/
       - media_food:/mediafiles/
