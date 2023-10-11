@@ -1,6 +1,5 @@
-# ![Foodgram](https://github.com/elValeron/foodgram-project-react.git)
-![Продуктовый помошник](https://elfood.ddns.net/)
-## Foodgram - Место где Ты можешь поделится своим любимым рецептом!
+![Foodgram](https://img.shields.io/badge/foodgram-passing-purple)
+# ![Продуктовый помошник](https://elfood.ddns.net/)
 
 # Описание: 
     - Продуктовый помошник - сервис в котором пользователи могут делится своими рецептами.
