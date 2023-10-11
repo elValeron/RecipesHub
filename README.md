@@ -1,5 +1,5 @@
 ![Foodgram](https://img.shields.io/badge/foodgram-passing-purple)
-# ![Продуктовый помошник](https://elfood.ddns.net/)
+# [Продуктовый помошник](https://elfood.ddns.net/)
 
 # Описание: 
     - Продуктовый помошник - сервис в котором пользователи могут делится своими рецептами.
@@ -93,5 +93,5 @@
             ```
         ### Поздравляю, проект готов к дебагу, удачи! :+1:
 
-![Документация](https://elfood.ddns.net/api/docs/)
-![elValeron](https://github.com/elValeron/)
+### [Документация](https://elfood.ddns.net/api/docs/)
+### [elValeron](https://github.com/elValeron/)
