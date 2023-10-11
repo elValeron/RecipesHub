@@ -93,5 +93,5 @@
             ```
         ### Поздравляю, проект готов к дебагу, удачи! :+1:
 
-### [Документация](https://elfood.ddns.net/api/docs/)
-### [elValeron](https://github.com/elValeron/)
+[Документация](https://elfood.ddns.net/api/docs/)
+Автор [elValeron](https://github.com/elValeron/)
