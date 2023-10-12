@@ -1,4 +1,4 @@
-![Foodgram](https://img.shields.io/badge/foodgram-passing-purple)
+![Foodgram](https://github.com/elvaleron/foodgram-project-react/actions/workflows/main.yml/badge.svg)
 # [Продуктовый помошник](https://elfood.ddns.net/)
 
 # Описание: 
@@ -46,7 +46,7 @@
         ```
         - sudo docker compose -f docker-compose.yml exec backend cp -r /app/collected_static/. /backend_static/static/
         ```
-        ### Поздравляю! Можно приступить к работе с сервисом!
+        ### Поздравляю! Можно приступить к работе с сервисом! :+1:
         
 2. ### Запуск сервиса для отладки: 
     - На локальной машине создайте директорию в которой будет хранится проект
