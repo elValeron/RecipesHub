@@ -48,7 +48,8 @@ DEBUG_TOOLBAR_CONFIG = {
 
 ROOT_URLCONF = 'foodgram.urls'
 
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_HOST', default='http://localhost')
+print()
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS')
 
 TEMPLATES = [
     {
