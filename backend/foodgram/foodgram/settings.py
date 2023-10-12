@@ -48,6 +48,10 @@ DEBUG_TOOLBAR_CONFIG = {
 
 ROOT_URLCONF = 'foodgram.urls'
 
+CSRF_TRUSTED_ORIGINS = [
+    ALLOWED_HOSTS
+]
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

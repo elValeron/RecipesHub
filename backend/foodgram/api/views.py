@@ -271,6 +271,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     )
     def download_shopping_cart(self, request):
         """Action для выгрузки списка покупок."""
+        user = request.user
         ingredients = IngredientForRecipe.objects.filter(
             recipe__shoppingcart__user=request.user
         ).values(
@@ -281,20 +282,4 @@ class RecipeViewSet(viewsets.ModelViewSet):
         ).order_by(
             'ingredients__name'
         )
-        shopping_cart = [
-            f'Cписок покупок {request.user}: \r'
-        ]
-        for ingredient in ingredients:
-            shopping_cart.append(
-                ' '.join(
-                    map(
-                        str,
-                        ingredient.values()
-                    )
-                ) + '\n'
-            )
-        response = FileResponse(shopping_cart, content_type='text')
-        response['Content-Disposition'] = (
-            'attachment; filename={file_name}'.format(file_name=request.user)
-        )
-        return response
+        return self.download_shopping_cart(user, ingredients)
