@@ -62,7 +62,7 @@ class IngredientForRecipeSerializer(serializers.ModelSerializer):
         max_value=MAX_VALUE_AMOUNT,
         error_messages={
             'max_value':
-                f'Значение не должно быть больше {MAX_VALUE_TIME}',
+                f'Значение не должно быть больше {MAX_VALUE_AMOUNT}',
             'min_value':
                 f'Значение не должно быть меньше {MIN_VALUE}'
         }
