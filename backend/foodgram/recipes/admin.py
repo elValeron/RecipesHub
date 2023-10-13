@@ -88,7 +88,7 @@ class RecipeAdmin(ModelAdmin):
 
     @display(description='ингредиенты')
     def get_ingredients(self, obj):
-        return [ingredient.name for ingredient in obj.ingregients.all()]
+        return [ingredient.name for ingredient in obj.ingredients.all()]
 
 
 @register(Favorite)
@@ -109,7 +109,6 @@ class ShoppingCartAdmin(ModelAdmin):
     """Модель ShoppingCart для админ панели."""
 
     fields = (
-        'pk',
         'recipe',
         'user',
     )
