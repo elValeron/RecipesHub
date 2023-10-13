@@ -48,7 +48,10 @@ DEBUG_TOOLBAR_CONFIG = {
 
 ROOT_URLCONF = 'foodgram.urls'
 
-CSRF_TRUSTED_ORIGINS = ('https://elfood.ddns.net',)
+CSRF_TRUSTED_ORIGINS = os.getenv(
+    'CSRF_TRUSTED_ORIGINS'.split(','),
+    default='http://localhost'
+)
 
 TEMPLATES = [
     {

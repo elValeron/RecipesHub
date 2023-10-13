@@ -282,4 +282,4 @@ class RecipeViewSet(viewsets.ModelViewSet):
         ).order_by(
             'ingredients__name'
         )
-        return self.download_shopping_cart(user, ingredients)
+        return self.create_shopping_cart(user, ingredients)
