@@ -97,10 +97,10 @@ class FavoriteAdmin(ModelAdmin):
 
     fields = (
         'recipe',
-        'author',
+        'user',
     )
     search_fields = (
-        'author',
+        'user',
     )
 
 
@@ -111,10 +111,10 @@ class ShoppingCartAdmin(ModelAdmin):
     fields = (
         'pk',
         'recipe',
-        'author',
+        'user',
     )
     search_fields = (
-        'author',
+        'user',
         'recipe',
     )
 
