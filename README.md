@@ -1,8 +1,7 @@
-![Foodgram](https://github.com/elvaleron/foodgram-project-react/actions/workflows/main.yml/badge.svg)
-# [Продуктовый помошник](https://elfood.ddns.net/)
+![RecipesHub](https://github.com/elvaleron/foodgram-project-react/actions/workflows/main.yml/badge.svg)
 
 # Описание: 
-    - Продуктовый помошник - сервис в котором пользователи могут делится своими рецептами.
+    - Recipes Hub - сервис в котором пользователи могут делится своими рецептами.
     
     - Функционал сервиса позваляет подписываться на понравившихся автором, добавлять рецепты в избранное, и пожалуй одно из главных конкурентных преимуществ данного сервиса, возможность скачать список продуктов для рецепта в универсальном формате .txt.
 
@@ -20,7 +19,7 @@
             ```
         - Склонируйте репозиторий командой:
             ```
-            - git clone https://github.com/elValeron/foodgram-project-react.git
+            - git clone https://github.com/elValeron/RecipesHub.git
             ```
         - Создайте по шаблону env_example собственный файл (.env), с данными для подключения к бд:
             ```
@@ -56,7 +55,7 @@
             ```
         - Склонируйте репозиторий командой:
             ```
-            - git clone https://github.com/elValeron/foodgram-project-react.git
+            - git clone https://github.com/elValeron/ResipesHub.git
             ```
         - Перейдите в директорию backend/ и установите виртуальное окружение командами:
             ```
@@ -93,5 +92,4 @@
             ```
         ### Поздравляю, проект готов к дебагу, удачи! :+1:
 
-[Документация](https://elfood.ddns.net/api/docs/)
 Автор [elValeron](https://github.com/elValeron/)
